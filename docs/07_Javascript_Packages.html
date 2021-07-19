@@ -1,0 +1,2081 @@
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script><p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h2>Packages and <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">Modules</a></h2>
+<p>The following content was pulled from the link in the section header.</p>
+<p>NPMJS <a href="npmjs.com">website</a> is very clear on these two things:</p>
+<blockquote>
+<p>A package is a file or directory that is described by a package.json file. A package must contain a package.json file in order to be published to the npm registry.
+A package is any of the following:</p>
+</blockquote>
+<ul>
+<li>a) A folder containing a program described by a package.json file.</li>
+<li>b) A gzipped tarball containing (a).</li>
+<li>c) A URL that resolves to (b).</li>
+<li>d) A git url that, when cloned, results in (a). </li>
+</ul>
+<blockquote>
+<p>A module is any file or directory in the node_modules directory that can be loaded by the Node.js require() function.  </p>
+<p>To be loaded by the Node.js require() function, a module must be one of the following:</p>
+<p>A folder with a package.json file containing </p>
+</blockquote>
+<ul>
+<li>a &quot;main&quot; field.</li>
+<li>A folder with an index.js file in it.</li>
+<li>A JavaScript file. </li>
+</ul>
+<blockquote>
+<p>In the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program: - <a href="https://docs.npmjs.com/about-packages-and-modules#about-modules">npmjs.com</a></p>
+</blockquote>
+<blockquote>
+<p>Note: Since modules are not required to have a package.json file, not all modules are packages. Only modules that have a package.json file are also packages.</p>
+</blockquote>
+<p>As well its good to know that:</p>
+<pre><code>&lt;!-- This will not execute, as it fails a CORS check --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/no-cors&quot;&gt;&lt;/script&gt;
+
+&lt;!-- This will not execute, as one of its imports fails a CORS check --&gt;
+&lt;script type=&quot;module&quot;&gt; import &#x27;https://….now.sh/no-cors&#x27;; &lt;/script&gt;
+
+&lt;!-- This will execute as it passes CORS checks --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://….now.sh/cors&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>and that</p>
+<p>Node modules do not add to the global scope without explicetly being pointed to. I.E. 'window.variable = hahaha'</p>
+<h2>Example: <a href="%5D(https://docs.npmjs.com/creating-node-js-modules)">Create</a> Node.js Modules</h2>
+<p>The following content was pulled from the link in the section header</p>
+<ol>
+<li>Create a package.json file</li>
+</ol>
+<ul>
+<li>create a package.json file : 'npm init'</li>
+<li>required fields: name, version, 'main' fields</li>
+<li>The default name is index.js.</li>
+</ul>
+<ol start="2">
+<li>Create the file that will be loaded when your module is required by another application</li>
+</ol>
+<ul>
+<li>
+<p>Once your package.json file is created, create the file that will be loaded when your module is required. The default name for this file is index.js.</p>
+</li>
+<li>
+<p>In the file, add a function as a property of the exports object. This will make the function available to other code: </p>
+</li>
+</ul>
+<p>'''exports.printMsg = function() {
+console.log(&quot;This is a message from the demo package&quot;);
+}'''</p>
+<ol start="3">
+<li>Test your module</li>
+</ol>
+<ul>
+<li>Publish: &quot;npm publish --access public&quot;</li>
+<li>mkdir test-directory</li>
+<li>cd ../path/to/test-directory</li>
+<li>npm install <your-module-name></li>
+<li>create a test.js file which requires your module and calls your module as a method.</li>
+</ul>
+<p>&quot;var req = require('request')&quot;</p>
+<ul>
+<li>On the command line, run node test.js. The message sent to the console.log should appear.</li>
+</ul>
+<h2>Example: <a href="https://zellwk.com/blog/publish-to-npm/">Publish</a> to NPM</h2>
+<p>The following content was pulled from the link in the section header</p>
+!npm login# Creating a folder named how-to-publish-to-npm
+mkdir how-to-publish-to-npm# Navigating into the folder
+cd how-to-publish-to-npm/content/how-to-publish-to-npm
+# This command runs you through a few questions and creates a package.json file for you at the end.
+!npm init! npm i -g npm<p>Heres an <a href="https://philipwalton.com/articles/using-native-javascript-modules-in-production-today/">article</a> with more instructions and best practices.</p>
+<h2>Package.json to use Git Gists</h2>
+<p>Git URLs used for npm packages can be formatted in the following ways:</p>
+<ul>
+<li>git://github.com/user/project.git#commit-ish</li>
+<li>git+ssh://user@hostname:project.git#commit-ish</li>
+<li>git+http://user@hostname/project/blah.git#commit-ish</li>
+<li>git+https://user@hostname/project/blah.git#commit-ish</li>
+</ul>
+<p>The commit-ish can be any tag, sha, or branch that can be supplied as an argument to git checkout. The default commit-ish is master.</p>
+<h2>Python Github Gist Javascript</h2>
+<p>Save a Github Gist using Python.  </p>
+! wget https://gist.githubusercontent.com/karpatic/c7b95a99dea7a19ceb9a366f0ef2a1ce/raw/db0e1a479baa32aaccc2bd629ed4680a2b36a126/HelloWorldGist; mv HelloWorldGist gitgist.js; import os
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+savesAs+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(url, folderPath, gistName, filename):
+  getGitGist(url, folderPath, gistName, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+url = 'https://gist.github.com/c7b95a99dea7a19ceb9a366f0ef2a1ce.git'
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'gitgist.js'
+displayGitGist(url, folderPath, gistName, filename)<script>document.querySelector("#output-area").appendChild(document.createTextNode("Hello World Gist"));</script><h2>ObservableHQ Modules</h2>
+<p>You can use ObservableHQ to create test and export JS Modules</p>
+<p>Here are some more notes on it:</p>
+<p><a href="https://observablehq.com/@observablehq/five-minute-introduction">Introduction</a> <a href="https://observablehq.com/@observablehq/introduction-to-require">Require</a> <a href="https://observablehq.com/@observablehq/downloading-and-embedding-notebooks">Embedding</a> <a href="https://observablehq.com/@observablehq/introduction-to-html">HTML</a></p>
+<p>And and embedding example:</p>
+<div id="help"></div>
+<br>
+<div id="chart"></div>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script type="module">
+// Get your notebook; compiled as an ES module.
+import notebook from "https://api.observablehq.com/@karpatic/my-test-javascript-notebook.js?v=3";
+// Load the Observable runtime and inspector to use it.
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+const runtime = new Runtime();
+
+// Load the notebook, observing its cells with a default Inspector
+// that simply renders the value of each cell into the provided DOM node.
+const main = runtime.module(notebook, Inspector.into(document.body));
+
+
+
+// If you don’t want to render the entire notebook:
+// Define a custom function to control which cells are rendered and where they go. 
+// For example, to render just the cell named “chart” into the DOM element with the same id, say:
+new runtime.module(notebook, name => { 
+    document.querySelector('#help').innerHTML += `${name}, `; 
+    if ( ["text","execute"].includes(name) ) { 
+        return new Inspector(document.querySelector("#chart")); 
+    } 
+});
+
+</script><h2>Modules in the browser</h2>
+from google.colab import drivedrive.mount('/cont/')lscd ! echo 'console.log("This?")' > index.jsimport os
+import IPython
+def readFile(filename):
+  f = open(filename, 'r')
+  content = f.read()
+  f.close()
+  return content
+
+def getFile(url, savesAs, filename):
+  responce = "wget "+url+" ; mv "+HelloWorldGist+" "+filename+"; "
+  os.system(responce)
+
+def displayCode(url, savesAs, filename):
+  getFile(url, savesAs, filename) 
+  display(IPython.display.Javascript( readFile(filename) ) )
+
+def getGitGist(url, folderPath, gistName, filename):
+  responce = "git clone {}; mv {}/{} {}; rm {} -r".format(url, folderPath, gistName, filename, folderPath);
+  os.system(responce)
+
+def displayGitGist(folderPath, gistName, filename):
+  url = 'https://gist.github.com/'+ folderPath +'.git'
+  getGitGist(url, folderPath, gistName, filename)
+  # return getFile(url, filename, filename)
+  display(IPython.display.Javascript( readFile(filename) ) )
+folderPath = 'c7b95a99dea7a19ceb9a366f0ef2a1ce'
+gistName = 'HelloWorldGist'
+filename = 'index.js'
+displayGitGist(folderPath, gistName, filename)<script>console.log("This?")
+</script>! echo "<button> Click me! </button>" > index.htmlimport IPython
+IPython.display.HTML(filename="./index.html")<button> Click me! </button>
+<p>Safari, Chrome, Firefox and Edge all support the ES6 Modules import syntax.</p>
+<script type="module">
+  import { tag } from './html.js'
+
+  const h1 = tag('h1', ' Hello Modules!')
+  document.body.appendChild(h1)
+</script><script type="module" src="app.js"></script>
+
+<!-- app.js 
+import { tag } from './html.js'
+
+const h1 = tag('h1', ' Hello Modules!')
+document.body.appendChild(h1)
+--><p>If you want to load ES modules on a different domain, you’ll need to enable CORS.</p>
+<p>Some <a href="https://usefulangle.com/post/256/script-type-module-vs-script-javascript">more</a> on that:</p>
+<blockquote>
+<p>For information on using module, see our JavaScript modules guide. Unlike classic scripts, module scripts require the use of the CORS protocol for cross-origin fetching - <a href="https://javascript.info/modules-intro">javascript.info</a></p>
+</blockquote>
+<blockquote>
+<p>Scripts without async , defer or type=&quot;module&quot; attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.</p>
+<p>The script should be served with the text/javascript MIME type, but browsers are lenient and only block them if the script is served with an image type (image/<em>); a video type (video/</em>); an audio (audio/*) type; or text/csv. If the script is blocked, an error is sent to the element, if not a load event is sent. - <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a></p>
+</blockquote>
+
+<!--In a normal <script> tag variables, functions etc have global scope. These are available even inside module script tags.-->
+<script>
+	function myFunc() {
+		console.log("Will be accessible from anywhere");
+	}
+</script>
+
+<script>
+	// accessible
+	myFunc();
+</script>
+
+<!-- The scope of variables, functions etc in a scrpt type="module" tag is limited to that block. -->
+<script type="module">
+	// accessible
+	myFunc();
+	// this is available only within this block
+	function myFunc2() {
+		console.log("Will not be accessible from anywhere else");
+	}
+</script>
+
+<script>
+	// reference error : myFunc is not defined
+	myFunc2();
+</script><!-- Module Script can Import other Javascript Modules -->
+<script type="module">
+	import {someFunc, someVar} from './js/myModule.js'
+</script>
+
+<!-- In a normal <script> tag, modules cannot be imported. import statement will throw a syntax error. -->
+<script type="text/javascript">
+	// syntax error
+	import {someFunc, someVar} from './js/myModule.js'
+</script><!-- The value of this at the top-level in a module is undefined.-->
+
+<script type="module">
+	//undefined
+	console.log(this);
+</script>
+
+<!-- In a regular <script> tag, value of this is the window object (at top-level). -->
+
+<script>
+	// window
+	console.log(this);
+</script>

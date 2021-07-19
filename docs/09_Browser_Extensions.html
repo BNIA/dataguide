@@ -1,0 +1,1824 @@
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<blockquote>
+<p>notice: Chrome's V2 <a href="https://developer.chrome.com/docs/extensions/mv2/getstarted/">Documentation</a> on their Extensions were used extensively in the writing of this piece. Refer to the above link for something more complete.</p>
+</blockquote>
+<blockquote>
+<p>warning: A new Chrome Extension <a href="https://developer.chrome.com/docs/extensions/mv3/intro/">Versioning</a> exists and so information is effectively now old and may be depricated. </p>
+</blockquote>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/overview/">Extensions</a> are browser-event based programs that enhance the Chrome browsing experience. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/reference/browserAction/">browserAction</a>/ <a href="https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup">Popup</a> - What we all think of when we think of an extension. A small box in the corner that opens a popup when clicked.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/background_pages/">Background</a> scripts - No User interface. Do not execute on the bhe webpage. Can be triggered by an event.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv3/content_scripts/">content</a> scripts - Can modify a webpage. runs inline on the browser.</p>
+<p><a href="https://riptutorial.com/google-chrome-extension/example/13137/options-page">options</a> page - A dedicated page a developer can create that lets users set up options for the extension. </p>
+<p><a href="https://developer.chrome.com/docs/extensions/mv2/themes/">themes</a> - Change the look of the browser</p>
+<p>Extensions are made of different, but cohesive, components:</p>
+<ol>
+<li>Create the manifest.json</li>
+<li>Add instruction</li>
+<li>Introduce a user interface</li>
+<li>Layer logic</li>
+<li>Give users options</li>
+<li>Take the next step</li>
+</ol>
+<p><a href="https://github.com/GoogleChrome/chrome-extensions-samples">Examples</a></p>
+<h2>Create the manifest.json</h2>
+<p>The directory holding the manifest file can be added as an extension in developer mode in its current state.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<p>chrome://extensions =&gt; More Tools =&gt; Extensions =&gt; Enable Developer Mode then click LOAD UNPACKED</p>
+<h2>Add instruction</h2>
+<blockquote>
+<p>A background page is loaded when it is needed, and unloaded when it goes idle. Some examples of events include:</p>
+<ul>
+<li>The extension is first installed or updated to a new version.</li>
+<li>The background page was listening for an event, and the event is dispatched.</li>
+<li>A content script or other extension sends a message.</li>
+<li>Another view in the extension, such as a popup, calls runtime.getBackgroundPage.</li>
+</ul>
+</blockquote>
+<p>Although the extension has been installed, it has no instruction. </p>
+<p>Introduce a <a href="https://developer.chrome.com/docs/extensions/mv2/background_pages/">background script</a> by creating a file titled background.js for <a href="https://developer.chrome.com/docs/extensions/reference/storage/">storing</a> data</p>
+<pre><code>chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set({color: &#x27;#3aa757&#x27;}, function() {
+    console.log(&quot;The color is green.&quot;);
+  });
+});
+</code></pre>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<h2>Manifest</h2>
+<p><strong>manifest.json</strong>
+This is the only file that must be present in every extension. </p>
+<ul>
+<li>It contains basic metadata such as its name, version and the permissions it requires. </li>
+<li>It also provides pointers to other files in the extension.</li>
+</ul>
+<p>This <strong>manifest</strong> can also <em>contain pointers to several</em> other types of files:</p>
+<ul>
+<li>Background scripts: Implement long-running logic.</li>
+<li>Icons for the extension and any buttons it might define.</li>
+<li>Sidebars, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups">popups</a>, and options pages: HTML documents that provide content for various user interface components.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a>: JavaScript included that will be injected into web pages.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">Web-accessible resources</a>: Make (images, HTML, CSS, or JavaScript) accessible to pages and content scripts.</li>
+</ul>
+<pre><code>manifest.json
+
+{
+    &quot;manifest_version&quot;: 2,
+  
+    &quot;name&quot;: &quot;ACS Downloader&quot;,
+    &quot;description&quot;: &quot;This extension will download ACS data&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+  
+    &quot;browser_action&quot;: {
+     &quot;default_title&quot;: &quot;ACS Downloader&quot;,
+     &quot;default_icon&quot;: &quot;icon.png&quot;,
+     &quot;default_popup&quot;: &quot;popup.html&quot;
+    },
+    &quot;permissions&quot;: [
+     &quot;activeTab&quot;
+     ]
+}
+</code></pre>
+<h2>Introduce a user interface</h2>
+<p>Extensions can have many forms of a user interface, but this one will use a <a href="https://developer.chrome.com/docs/extensions/mv2/user_interface/#popup">popup</a>. Create a popup.html.</p>
+<p>Like the background script, this file needs to be listed in the manifest under <a href="https://developer.chrome.com/docs/extensions/reference/pageAction/">page_action</a>. </p>
+<p>Toolbar icons are also included under <code>page_action</code> section via the <code>default_icons</code> field. </p>
+<pre><code>{
+  &quot;name&quot;: &quot;Getting Started Example&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;description&quot;: &quot;Build an Extension!&quot;,
+  &quot;permissions&quot;: [&quot;storage&quot;],
+  &quot;background&quot;: {
+    &quot;scripts&quot;: [&quot;background.js&quot;],
+    &quot;persistent&quot;: false
+  },
+  &quot;page_action&quot;: {
+    &quot;default_popup&quot;: &quot;popup.html&quot;,
+    &quot;default_icon&quot;: {
+      &quot;16&quot;: &quot;images/get_started16.png&quot;,
+      &quot;32&quot;: &quot;images/get_started32.png&quot;,
+      &quot;48&quot;: &quot;images/get_started48.png&quot;,
+      &quot;128&quot;: &quot;images/get_started128.png&quot;
+    }
+  },
+  &quot;icons&quot;: {
+    &quot;16&quot;: &quot;images/get_started16.png&quot;,
+    &quot;32&quot;: &quot;images/get_started32.png&quot;,
+    &quot;48&quot;: &quot;images/get_started48.png&quot;,
+    &quot;128&quot;: &quot;images/get_started128.png&quot;
+  },
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      button {
+        height: 30px;
+        width: 30px;
+        outline: none;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;button id=&quot;changeColor&quot;&gt;&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Available <a href="https://developer.chrome.com/docs/extensions/reference/">APIS</a></p>
+<ul>
+<li><strong>alarms</strong> - Use the chrome.alarms API to schedule code to run periodically or at a specified time in the future.</li>
+<li><strong>browserAction</strong> -	Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can have a tooltip, a badge, and a popup.</li>
+<li><strong>contextMenus</strong> - Use the chrome.contextMenus API to add items to Google Chrome's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.</li>
+<li><strong>desktopCapture</strong> - Desktop Capture API that can be used to capture content of screen, individual windows or tabs.</li>
+<li><strong>devtools.inspectedWindow</strong> - Use the chrome.devtools.inspectedWindow API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.</li>
+<li><strong>devtools.network</strong> - Use the chrome.devtools.network API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.</li>
+<li><strong>devtools.panels</strong> - Use the chrome.devtools.panels API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.</li>
+<li><strong>events</strong> - The chrome.events namespace contains common types used by APIs dispatching events to notify you when something interesting happens.</li>
+<li><strong>fileSystemProvider</strong> - Use the chrome.fileSystemProvider API to create file systems, that can be accessible from the file manager on Chrome OS.</li>
+<li><strong>fontSettings</strong> - Use the chrome.fontSettings API to manage Chrome's font settings.</li>
+<li><strong>notifications</strong> - Use the chrome.notifications API to create rich notifications using templates and show these notifications to users in the system tray.</li>
+<li><strong>pageAction</strong> - Use the chrome.pageAction API to put icons in the main Google Chrome toolbar, to the right of the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages. Page actions appear grayed out when inactive.</li>
+<li><strong>pageCapture</strong>	- Use the chrome.pageCapture API to save a tab as MHTML.</li>
+<li><strong>permissions</strong>	- Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</li>
+<li><strong>tts</strong>	- Use the chrome.tts API to play synthesized text-to-speech (TTS). See also the related ttsEngine API, which allows an extension to implement a speech engine.</li>
+<li>webRequest - Use the chrome.webRequest API to observe and analyze traffic and to intercept, block, or modify requests in-flight.</li>
+<li><strong>automation</strong> - The chrome.automation API allows developers to access the automation (accessibility) tree for the browser. The tree resembles the DOM tree, but only exposes the semantic structure of a page. It can be used to programmatically interact with a page by examining names, roles, and states, listening for events, and performing actions on nodes.</li>
+<li><strong>processes</strong>	- Use the chrome.processes API to interact with the browser's processes.</li>
+</ul>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></h2>
+<p>A <strong>content script</strong> is a part of your extension that* runs in the context of a particular web page* </p>
+<p>(as opposed to <strong><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Background_scripts">background</a> scripts</strong> which are <em>part of the extension</em>, </p>
+<p>or <strong>scripts</strong> which are <em>part of the web site itself</em></p>
+<pre><code>popup.html
+
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;ACS Downloader&lt;/title&gt;
+    &lt;style&gt;
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    &lt;/style&gt;
+    &lt;!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --&gt;
+    &lt;script src=&quot;popup.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+	  &lt;h1&gt;ACS Downloader&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p>Background scripts can access all the WebExtension JavaScript APIs, but they can't directly access the content of web pages. So if your extension needs to do that, you need content scripts.</p>
+</blockquote>
+<h2><a href="https://www.adambarth.com/experimental/crx/docs/getstarted.html">Load</a> the extension.</h2>
+<ul>
+<li>
+<p>Bring up the extensions management page by clicking the wrench icon  and choosing Tools &gt; Extensions.</p>
+</li>
+<li>
+<p>If the label &quot;Developer mode&quot; has a + button by it, click it. More buttons and information appear.</p>
+</li>
+<li>
+<p>Click the Load unpacked extension button. A file dialog appears.</p>
+</li>
+<li>
+<p>In the file dialog, navigate to your extension's folder and click OK.</p>
+</li>
+<li>
+<p>If your extension is valid, its icon appears next to the address bar, and information about the extension appears in the extensions page, as the following screenshot shows. Otherwise, an Error button that reveals a popup help you out.</p>
+</li>
+<li>
+<p>Finally, Click vertical ellipsis (in the top right of the broswer) &gt; Hover over &quot;More tools&quot; &gt; Select &quot;<a href="chrome://extensions/">Extensions</a>&quot; (or just click that link)</p>
+</li>
+</ul>

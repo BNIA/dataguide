@@ -1,0 +1,392 @@
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
+<p>⚠️ This writing is a work in progress.⚠️</p>
+<blockquote>
+<p>note: There is a lot of quoting and paraphrasing on this page in particular. Be sure to check the links you want to learn more.</p>
+</blockquote>
+<h1><a href="https://cloud.google.com/functions/docs/quickstart-python"> Quickstart </a></h1>
+<ol>
+<li>
+<p>In the Cloud Console, on the project selector page, select or create a Cloud project.
+<a href="https://console.cloud.google.com/projectselector2/home/dashboard?_ga=2.178554084.1700393638.1583430572-875266049.1582662020&amp;_gac=1.114841077.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> GCloud Platform Project Selector </a></p>
+</li>
+<li>
+<p>Make sure that <a href="https://cloud.google.com/billing/docs/how-to/modify-project"> billing </a> is enabled for your Google Cloud project. </p>
+</li>
+<li>
+<p>Enable the Cloud Functions <a href="https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions&amp;redirect=https://cloud.google.com/functions/docs/quickstart-python&amp;_ga=2.254101704.1700393638.1583430572-875266049.1582662020&amp;_gac=1.24998344.1582662020.Cj0KCQiAqNPyBRCjARIsAKA-WFzpKrN2CANBYiFYzQxDMN-_ckwddpHwC_QWPiGPgZFt_NjbX7FJxWkaAhReEALw_wcB"> API </a>.</p>
+</li>
+</ol>
+<h1>Google Cloud <a href="https://console.cloud.google.com/functions/list?project=serverlessfunctions-250616&amp;tab=general"> Functions </a></h1>
+<p>Google Documentation on:</p>
+<ul>
+<li><a href="https://cloud.google.com/functions/docs/calling/http"> Calling </a></li>
+<li><a href="https://cloud.google.com/functions/docs/writing"> Writing </a></li>
+<li><a href="https://cloud.google.com/functions/docs/first-python"> First Python </a></li>
+</ul>
+<p>I set these up a little while ago for testing:</p>
+https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction! curl -X POST https://us-central1-serverlessfunctions-250616.cloudfunctions.net/testFunction -H "Content-Type:application/json"  -d '{"name":"Jane"}'
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>403 Forbidden</title>
+</head>
+<body text=#000000 bgcolor=#ffffff>
+<h1>Error: Forbidden</h1>
+<h2>Your client does not have permission to get URL <code>/testFunction</code> from this server.</h2>
+<h2></h2>
+</body></html>
+<p><a href="https://cloud.google.com/datastore/">Datastore</a></p>
+<p>Cloud Datastore is a schemaless database.</p>
+<p>var companies = query.filter('name =', 'Google').filter('size &lt;', 400);</p>
+<p>-------------| FREE daily limit |	PRICE above free limit | Price Unit</p>
+<p>Stored data	| 1 GB storage	| $0.18	| GB/Month</p>
+<p>Entity Reads	| 50,000 | $0.06 | per 100,000 entities</p>
+<p>Entity Writes	| 20,000 | $0.18 | per 100,000 entities</p>
+<p>Entity Deletes	| 20,000 | $0.02 | per 100,000 entities</p>
+<p><a href="https://cloud.google.com/bigtable">Big Table</a></p>
+<p>Cloud Bigtable offers consistent sub-10ms latency.</p>
+<p>Feature |	Price</p>
+<p>Nodes | $0.65 node/hr</p>
+<p>SSD Storage | $0.17 (GB/Month)</p>
+<p>HDD Storage | $0.026 (GB/Month)</p>
