@@ -1,34 +1,52 @@
-# Dataplay: The Developer's Guidebook
+# Dataguide: The Developer's Guidebook
 > This can help guide you on your Pythonic development journey.
 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bnia/datalab/master?filepath=%2Fnotebooks%2Findex.ipynb)
-[![Binder](https://pete88b.github.io/fastpages/assets/badges/colab.svg)](https://colab.research.google.com/github/bnia/datalab/blob/master/notebooks/index.ipynb)
-[![Binder](https://pete88b.github.io/fastpages/assets/badges/github.svg)](https://github.com/bnia/datalab/tree/master/notebooks/index.ipynb)
+<img src="https://raw.githubusercontent.com/bniajfi/bniajfi/main/bnia_logo_new.png" height="160px" width="auto" style="max-width: autopx">
+
+<h2 align="left"><img src="https://raw.githubusercontent.com/sidbelbase/sidbelbase/master/wave.gif" width="30px">Hi! We are <a href="https://bniajfi.org/">BNIA-JFI</a>.</h2>
+
+This package was made to help with software development
+
+__Included__
+- Functions built and used by BNIA for day to day tasks.
+- Made to be shared via IPYNB/ Google Colab notebooks with in-built examples using 100% publicly accessible data & links.
+- Online [documentation](https://bniajfi.org/dataplay/) created from the notebooks.
+
+[TOC](https://github.com/bniajfi)
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bnia/dataguide/main?filepath=%2Fnotebooks%2Findex.ipynb)
+[![Binder](https://pete88b.github.io/fastpages/assets/badges/colab.svg)](https://colab.research.google.com/github/bnia/dataguide/blob/main/notebooks/index.ipynb)
+[![Binder](https://pete88b.github.io/fastpages/assets/badges/github.svg)](https://github.com/bnia/dataguide/tree/main/notebooks/index.ipynb)
 [![Open Source Love svg3](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
-[![NPM License](https://img.shields.io/npm/l/all-contributors.svg?style=flat)](https://github.com/bnia/dataguide/blob/master/LICENSE)
+[![NPM License](https://img.shields.io/npm/l/all-contributors.svg?style=flat)](https://github.com/bnia/dataguide/blob/main/LICENSE)
 [![Active](http://img.shields.io/badge/Status-Active-green.svg)](https://bnia.github.io) 
-[![Python Versions](https://img.shields.io/pypi/pyversions/dataplay.svg)](https://pypi.python.org/pypi/dataplay/)
-[![GitHub last commit](https://img.shields.io/github/last-commit/bnia/dataguide.svg?style=flat)]() 
-[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/) 
+[![GitHub last commit](https://img.shields.io/github/last-commit/bnia/dataguide.svg?style=flat)]()  
 
 [![GitHub stars](https://img.shields.io/github/stars/bnia/dataguide.svg?style=social&label=Star)](https://github.com/bnia/dataguide) 
 [![GitHub watchers](https://img.shields.io/github/watchers/bnia/dataguide.svg?style=social&label=Watch)](https://github.com/bnia/dataguide) 
 [![GitHub forks](https://img.shields.io/github/forks/bnia/dataguide.svg?style=social&label=Fork)](https://github.com/bnia/dataguide) 
 [![GitHub followers](https://img.shields.io/github/followers/bnia.svg?style=social&label=Follow)](https://github.com/bnia/dataguide) 
 
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/bnia/dataguide.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20this%20%E2%9C%A8%20colab%20by%20@bnia%20https://github.com/bnia/dataguide%20%F0%9F%A4%97) 
-[![Twitter Follow](https://img.shields.io/twitter/follow/bnia.svg?style=social)](https://twitter.com/bnia)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/bnia/dataguide.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20this%20%E2%9C%A8%20colab%20by%20@bniajfi%20https://github.com/bnia/dataguide%20%F0%9F%A4%97) 
+[![Twitter Follow](https://img.shields.io/twitter/follow/bniajfi.svg?style=social)](https://twitter.com/bniajfi)
 
 ## How to use
 
-Visit the GitHub [page](https://github.com/bnia/dataguide) if you are viewing this from [GitHub](https://github.com/).
+#### __TIPS__
+ 
+- Content covered in previous tutorials will be used in later tutorials. 
 
-While any chapter can be read as a separate topic, it would be best if you would start from the beginning.
+- __New code and or  information *should* have explanations and or descriptions__ attached. 
 
-The [dataguide](https://bnia.github.io/dataguide/) Guidebook uses modules created from the [Dataplay](https://bnia.github.io/dataplay/) Handbook, where you can find tutorials and documentation on these modules.
+- Concepts or code covered in previous tutorials will be used without being explaining in entirety.
 
+- __If content can not be found in the current tutorial and is not covered in previous tutorials, please let me know.__
+
+- This notebook has been optimized for Google Colabs ran on a Chrome Browser. 
+
+- Statements found in the index page on view expressed, responsibility, errors and ommissions, use at risk, and licensing  extend throughout the tutorial.
 
 ## Legal
 
